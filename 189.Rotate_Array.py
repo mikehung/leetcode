@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 
 class Solution(object):
+    def rotate1(self, nums, k):
+        nums[:k], nums[k:] = nums[len(nums)-k:], nums[:len(nums)-k]
+
     def rotate(self, nums, k):
         """
         :type nums: List[int]
@@ -8,7 +11,13 @@ class Solution(object):
         :rtype: void Do not return anything, modify nums in-place instead.
         """
 
-        nums[:k], nums[k:] = nums[len(nums)-k:], nums[:len(nums)-k]
+        if not nums:
+            return
+        k = k % len(nums)
+        nums = list(reversed(nums))
+        nums[:k] = list(reversed(nums[:k]))
+        nums[k:] = list(reversed(nums[k:]))
+
         print(nums)
 
 
