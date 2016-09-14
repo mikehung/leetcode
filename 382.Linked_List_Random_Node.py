@@ -17,23 +17,25 @@ class Solution(object):
         :type head: ListNode
         """
         self.head = head
+        self.length = 0
 
     def getRandom(self):
         """
         Returns a random node's value.
         :rtype: int
         """
-        ptr = self.head
-        count = 0
+        if self.length == 0:
+            ptr = self.head
+            while ptr:
+                self.length += 1
+                ptr = ptr.next
 
-        while ptr:
-            count += 1
-            if random.randint(1, count) == count:
-                val = ptr.val
+        ptr = self.head
+        for i in range(random.randrange(self.length)):
             ptr = ptr.next
 
-        print(val)
-        return val
+        print(ptr.val)
+        return ptr.val
 
 
 # Your Solution object will be instantiated and called as such:
