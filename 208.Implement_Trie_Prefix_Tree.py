@@ -5,13 +5,8 @@ class TrieNode(object):
         """
         Initialize your data structure here.
         """
-        # a~z is 26 char
-        self.s = [None]*26
-        self.c = 0
-
-    @staticmethod
-    def index(w):
-        return ord(w) - ord('a')
+        self.s = {}
+        self.isWord = False
 
 
 class Trie(object):
@@ -27,11 +22,10 @@ class Trie(object):
         """
         node = self.root
         for w in word:
-            i = TrieNode.index(w)
-            if not node.s[i]:
-                node.s[i] = TrieNode()
-            node = node.s[i]
-        node.c += 1
+            if w not in node.s:
+                node.s[w] = TrieNode()
+            node = node.s[w]
+        node.isWord = True
 
     def search(self, word):
         """
@@ -41,12 +35,11 @@ class Trie(object):
         """
         node = self.root
         for w in word:
-            i = TrieNode.index(w)
-            if not node.s[i]:
+            if w not in node.s:
                 return False
-            node = node.s[i]
+            node = node.s[w]
 
-        return node.c > 0
+        return node.isWord
 
     def startsWith(self, prefix):
         """
@@ -57,20 +50,29 @@ class Trie(object):
         """
         node = self.root
         for w in prefix:
-            i = TrieNode.index(w)
-            if not node.s[i]:
+            if w not in node.s:
                 return False
-            node = node.s[i]
+            node = node.s[w]
 
         return True
+
+    def traverse(self, node, word=''):
+        keys = node.s.keys()
+        if not keys:
+            print(word)
+        for k in keys:
+            self.traverse(node.s[k], word + k)
 
 
 # Your Trie object will be instantiated and called as such:
 trie = Trie()
 trie.insert("somestring")
+trie.insert("sogood")
+trie.insert("goodjob")
 print(trie.search("key"))
 print(trie.search("somestring"))
 print(trie.search("some"))
 print(trie.startsWith("somestring"))
 print(trie.startsWith("some"))
 print(trie.startsWith("soome"))
+trie.traverse(trie.root)
