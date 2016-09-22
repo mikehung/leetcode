@@ -21,12 +21,6 @@ class TrieNode(object):
     def getKeys(self):
         return self.words.keys()
 
-    def setWord(self):
-        self.isWord = True
-
-    def isWord(self):
-        return self.isWord
-
 class WordDictionary(object):
     def __init__(self):
         """
@@ -44,7 +38,7 @@ class WordDictionary(object):
         for c in word:
             node.addChar(c)
             node = node.getChar(c)
-        node.setWord()
+        node.isWord = True
 
     def searchForRoot(self, root, word):
         node = root
@@ -68,29 +62,64 @@ class WordDictionary(object):
         :type word: str
         :rtype: bool
         """
-        return self.searchForRoot(self.root, word)
+        child_nodes = [self.root]
+
+        for c in word:
+            nodes = child_nodes
+            child_nodes = []
+
+            if not nodes:
+                break
+
+            for node in nodes:
+                if c == '.':
+                    child_nodes += node.words.values()
+                elif node.containChar(c):
+                    child_nodes.append(node.getChar(c))
+
+        return any([node.isWord for node in child_nodes])
 
 
 # Your WordDictionary object will be instantiated and called as such:
 wordDictionary = WordDictionary()
-wordDictionary.addWord("word")
-print(wordDictionary.search("pattern"))
-print(wordDictionary.search("word"))
-print(wordDictionary.search("wo.d"))
-print(wordDictionary.search("wo.x"))
-wordDictionary.addWord("worx")
-print(wordDictionary.search("wo.x"))
-wordDictionary.addWord("at")
-wordDictionary.addWord("and")
-wordDictionary.addWord("an")
-wordDictionary.addWord("add")
-print(wordDictionary.search("a"))
-print(wordDictionary.search(".at"))
-wordDictionary.addWord("bat")
-print(wordDictionary.search(".at"))
-print(wordDictionary.search("an."))
-print(wordDictionary.search("a.d."))
-print(wordDictionary.search("b."))
-print(wordDictionary.search("a.d"))
-print(wordDictionary.search("."))
+# wordDictionary.addWord("word")
+# print(wordDictionary.search("pattern"))
+# print(wordDictionary.search("word"))
+# print(wordDictionary.search("wo.d"))
+# print(wordDictionary.search("wo.x"))
+# wordDictionary.addWord("worx")
+# print(wordDictionary.search("wo.x"))
+# wordDictionary.addWord("at")
+# wordDictionary.addWord("and")
+# wordDictionary.addWord("an")
+# wordDictionary.addWord("add")
+# print(wordDictionary.search("a"))
+# print(wordDictionary.search(".at"))
+# wordDictionary.addWord("bat")
+# print(wordDictionary.search(".at"))
+# print(wordDictionary.search("an."))
+# print(wordDictionary.search("a.d."))
+# print(wordDictionary.search("b."))
+# print(wordDictionary.search("a.d"))
+# print(wordDictionary.search("."))
 # [false,false,true,true,false,false,true,false]
+wordDictionary.addWord("ran")
+wordDictionary.addWord("rune")
+wordDictionary.addWord("runner")
+wordDictionary.addWord("runs")
+wordDictionary.addWord("add")
+wordDictionary.addWord("adds")
+wordDictionary.addWord("adder")
+wordDictionary.addWord("addee")
+a = []
+a.append(wordDictionary.search("r.n"))
+a.append(wordDictionary.search("ru.n.e"))
+a.append(wordDictionary.search("add"))
+a.append(wordDictionary.search("add."))
+a.append(wordDictionary.search("adde."))
+a.append(wordDictionary.search(".an."))
+a.append(wordDictionary.search("...s"))
+a.append(wordDictionary.search("....e."))
+a.append(wordDictionary.search("......."))
+a.append(wordDictionary.search("..n.r"))
+print(a)
