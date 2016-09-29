@@ -8,6 +8,7 @@ class Solution(object):
         :type x: int
         :rtype: int
         """
+
         n, y = 0, abs(x)
         while y > 0:
             d, m = divmod(y, 10)
