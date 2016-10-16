@@ -14,27 +14,16 @@ class Codec:
         :type root: TreeNode
         :rtype: str
         """
-        if not root: return ''
-
-        result = []
-        dad = [root]
-
-        while dad:
-            son = []
-            for node in dad:
-                if node:
-                    result += [str(node.val)]
-                    son += [node.left, node.right]
-                else:
-                    result += ['n']
-            dad = son
-
-        i = len(result)-1
-        while i:
-            if result[i] != 'n': break
-            i -= 1
-
-        return ','.join(result[:i+1])
+        def buildList(root, lst):
+            if not root:
+                lst.append('N')
+            else:
+                lst.append(str(root.val))
+                buildList(root.left, lst)
+                buildList(root.right, lst)
+        lst = []
+        buildList(root, lst)
+        return ','.join(lst)
 
 
     def deserialize(self, data):
@@ -43,25 +32,17 @@ class Codec:
         :type data: str
         :rtype: TreeNode
         """
-        if not data: return None
-
-        items = data.split(',')
-        root = TreeNode(items[0])
-        nodes = [(root, True), (root, False)]
-
-        for item in items[1:]:
-            if item == 'n':
-                nodes = nodes[1:]
+        def buildTree(it):
+            val = next(it)
+            if val == 'N':
+                root = None
             else:
-                node, isLeft = nodes[0]
-                son = TreeNode(item)
-                if isLeft:
-                    node.left = son
-                else:
-                    node.right = son
-                nodes = nodes[1:] + [(son, True), (son, False)]
+                root = TreeNode(int(val))
+                root.left = buildTree(it)
+                root.right = buildTree(it)
+            return root
 
-        return root
+        return buildTree(iter(data.split(',')))
 
 
 # Your Codec object will be instantiated and called as such:
