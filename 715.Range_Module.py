@@ -20,7 +20,6 @@ class RangeModule(object):
             return index
 
         i, j = updateRange(left, True), updateRange(right, False)
-        print(i, j)
         self.ranges[i:j] = [left]
         self.tracks[i:j] = [tracked]
 
